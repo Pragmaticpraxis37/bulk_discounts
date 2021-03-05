@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe 'merchant dashboard' do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
+    @merchant2 = Merchant.create!(name: 'Body Care')
 
     @discount_1 = Discount.create!(percent_discount: 10, quantity: 15, merchant_id: @merchant1.id)
     @discount_2 = Discount.create!(percent_discount: 15, quantity: 30, merchant_id: @merchant1.id)
+    @discount_3 = Discount.create!(percent_discount: 30, quantity: 40, merchant_id: @merchant2.id)
 
     @customer_1 = Customer.create!(first_name: 'Joey', last_name: 'Smith')
     @customer_2 = Customer.create!(first_name: 'Cecilia', last_name: 'Jones')
@@ -44,7 +46,6 @@ RSpec.describe 'merchant dashboard' do
   end
 
   it 'shows the merchant name' do
-    require "pry"; binding.pry
     expect(page).to have_content(@merchant1.name)
   end
 
@@ -80,15 +81,11 @@ RSpec.describe 'merchant dashboard' do
 
   it "can show a link to view all the discounts" do
     visit merchant_dashboard_index_path(@merchant1)
+
+    expect(page).to have_link("Bulk Discounts")
+
+    click_link "Bulk Discounts"
+
+    expect(current_path).to eq(merchant_discounts_path(@merchant1))
   end
-
 end
-
-# As a merchant
-# When I visit my merchant dashboard
-# Then I see a link to view all my discounts
-# When I click this link
-# Then I am taken to my bulk discounts index page
-# Where I see all of my bulk discounts including their
-# percentage discount and quantity thresholds
-# And each bulk discount listed includes a link to its show page
