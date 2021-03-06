@@ -21,4 +21,10 @@ RSpec.describe "discounts index page" do
     expect(page).to have_no_content("20")
     expect(page).to have_no_content("30")
   end
+
+  it "shows a link to edit the bulk discount" do
+    visit merchant_discount_path(@merchant1, @discount_1)
+
+    expect(page).to have_link("Edit Discount")
+  end
 end
