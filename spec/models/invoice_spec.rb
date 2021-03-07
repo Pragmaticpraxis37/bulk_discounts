@@ -11,6 +11,7 @@ RSpec.describe Invoice, type: :model do
     it { should have_many(:merchants).through(:items) }
     it { should have_many :transactions}
   end
+
   describe "instance methods" do
     it "total_revenue" do
       @merchant1 = Merchant.create!(name: 'Hair Care')
