@@ -7,6 +7,9 @@ RSpec.describe "create new discounts" do
   end
 
   it "shows a user form to create a new bulk discount and creates it" do
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
+
     visit new_merchant_discount_path(@merchant1)
 
     expect(page).to have_content("Create a Discount")
@@ -20,6 +23,9 @@ RSpec.describe "create new discounts" do
   end
 
   it "will not let invalid data be passed into the create form" do
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
+
     visit new_merchant_discount_path(@merchant1)
 
     fill_in("percent_discount", with: "ten")
@@ -37,6 +43,8 @@ RSpec.describe "create new discounts" do
   end
 
   it "will not let an incomplete form be accepted" do
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
     visit new_merchant_discount_path(@merchant1)
 
     fill_in("percent_discount", with: "ten")
