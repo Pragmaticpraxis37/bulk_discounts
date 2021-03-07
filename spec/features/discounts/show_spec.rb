@@ -11,6 +11,8 @@ RSpec.describe "discounts index page" do
   end
 
   it "shows an individual discount on the show page" do
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
     visit merchant_discounts_path(@merchant1)
 
     click_link "Discount", :href=>"/merchant/#{@merchant1.id}/discounts/#{@discount_1.id}"
