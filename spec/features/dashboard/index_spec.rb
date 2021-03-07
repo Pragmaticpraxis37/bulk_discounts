@@ -80,6 +80,9 @@ RSpec.describe 'merchant dashboard' do
   end
 
   it "can show a link to view all the discounts" do
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
+
     visit merchant_dashboard_index_path(@merchant1)
 
     expect(page).to have_link("Bulk Discounts")
