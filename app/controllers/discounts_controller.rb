@@ -11,9 +11,10 @@ class DiscountsController < ApplicationController
   def create
     @discount = @merchant.discounts.new(discount_create_params)
     if @discount.save
+      require "pry"; binding.pry
       redirect_to merchant_discounts_path(@merchant)
     else
-      flash[:error] = "Please use only whole numbers in Percent Discount and Quantity fields"
+      flash[:error] = "Please use only numbers in the Percent Discount and Quantity fields"
       render :new
     end
   end
@@ -33,7 +34,7 @@ class DiscountsController < ApplicationController
     else
       flash[:error] = "Please use only whole numbers in Percent Discount and Quantity fields"
       render :edit
-    end   
+    end
   end
 
   def destroy
@@ -53,6 +54,7 @@ class DiscountsController < ApplicationController
   end
 
   def discount_create_params
+    params[:percent_discount] = params[:percent_discount].to_i/100.0
     params.permit(:percent_discount, :quantity)
   end
 end
