@@ -13,7 +13,7 @@ RSpec.describe InvoiceItem, type: :model do
     it { should belong_to :item }
   end
 
-  it "#total_revenue_with_discounts" do
+  it "#discount_applied_status" do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @discount1 = Discount.create!(percent_discount: 0.20, quantity: 5, merchant_id: @merchant1.id)
     @discount2 = Discount.create!(percent_discount: 0.15, quantity: 6, merchant_id: @merchant1.id)
