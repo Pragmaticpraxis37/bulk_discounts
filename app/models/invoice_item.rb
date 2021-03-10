@@ -28,5 +28,3 @@ class InvoiceItem < ApplicationRecord
     .first
   end
 end
-
-# discounts.where("quantity <= ?", invoice_item_quantity).order(percent_discount: :desc).pluck(:id).first

@@ -65,14 +65,12 @@ RSpec.describe "discounts index page" do
     end
   end
 
-
   it "will delete the discount selected" do
     visit merchant_discounts_path(@merchant1)
 
     within("#discount-#{@discount_1.id}") do
       click_button "Delete"
     end
-    # click_button "Delete", :href=>"/merchant/#{@merchant1.id}/discounts/#{@discount_1.id}"
 
     expect(page).to have_content("#{@discount_2.percent_discount} percent off when #{@discount_2.quantity} items are bought.")
     expect(page).to have_no_content("#{@discount_1.percent_discount} percent off when #{@discount_1.quantity} items are bought.")
