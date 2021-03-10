@@ -2,12 +2,14 @@
 <br>
 
 <% @merchant.discounts.each do |discount| %>
+  <section id="discount-<%= discount.id %>">
   <%= "#{discount.percent_discount} percent off when #{discount.quantity} items are bought." %><br>
   <%= link_to "Discount", merchant_discount_path(@merchant, discount)%><br>
   <%= button_to "Delete", merchant_discount_path(@merchant, discount), method: :delete %><br>
+  </section>
 <% end %>
 <br>
-<%= "Upcoming Holidays" %><br>
+<h3>"Upcoming Holidays"</h3>
 <%= SwaggerService.holidays %><br>
 
 <%= link_to "Create a Discount", new_merchant_discount_path(@merchant) %>
