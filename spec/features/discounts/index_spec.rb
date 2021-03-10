@@ -5,9 +5,9 @@ RSpec.describe "discounts index page" do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Body Care')
 
-    @discount_1 = Discount.create!(percent_discount: 0.1, quantity: 15, merchant_id: @merchant1.id)
-    @discount_2 = Discount.create!(percent_discount: 0.15, quantity: 30, merchant_id: @merchant1.id)
-    @discount_3 = Discount.create!(percent_discount: 0.30, quantity: 40, merchant_id: @merchant2.id)
+    @discount_1 = Discount.create!(percent_discount: 10, quantity: 15, merchant_id: @merchant1.id)
+    @discount_2 = Discount.create!(percent_discount: 15, quantity: 30, merchant_id: @merchant1.id)
+    @discount_3 = Discount.create!(percent_discount: 30, quantity: 40, merchant_id: @merchant2.id)
 
     json_response = File.read('spec/fixtures/holidays.json')
     stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
@@ -64,8 +64,8 @@ RSpec.describe "discounts index page" do
     visit merchant_discounts_path(@merchant1)
 
     click_link "Delete", :href=>"/merchant/#{@merchant1.id}/discounts/#{@discount_1.id}"
-    save_and_open_page
-    expect(page).to have_content("15 percent off when #{@discount_2.quantity} items are bought.")
-    expect(page).to have_no_content("10 percent off when #{@discount_1.quantity} items are bought.")
+
+    expect(page).to have_content("#{@discount_2.percent_discount} percent off when #{@discount_2.quantity} items are bought.")
+    expect(page).to have_no_content("#{@discount_1.percent_discount} percent off when #{@discount_1.quantity} items are bought.")
   end
 end

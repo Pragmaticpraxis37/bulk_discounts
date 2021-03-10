@@ -1,13 +1,8 @@
-<%= "Edit Discount" %>
-<%= form_with(model: @discount, url: merchant_discount_path(@merchant, @discount), method: "patch" ,local: true) do |form| %>
+<h1>Edit Discount</h1>
+<%= form_with(url: merchant_discount_path(@merchant, @discount), method: "patch" ,local: true) do |form| %>
     <%= form.label "Change Percent Discount" %>
-    <%= form.text_field :percent_discount %><br>
+    <%= form.number_field :percent_discount, min: 0, max: 1, step: 0.01, value: @discount.percent_discount %><br>
     <%= form.label "Change Quantity" %>
-    <%= form.text_field :quantity %><br>
+    <%= form.number_field :quantity, min: 1, value: @discount.quantity %><br>
     <%= form.submit "Edit Discount" %>
-<% end  %>
-
-
-<!-- , :placeholder => "#{@discount.quantity}" -->
-<!-- , :placeholder => "#{@discount.percent_discount}" -->
-<!-- "/merchant/#{@merchant.id}/discounts/#{@discount.id}" -->
+<% end %>

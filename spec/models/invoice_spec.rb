@@ -25,7 +25,7 @@ RSpec.describe Invoice, type: :model do
       expect(@invoice_1.total_revenue).to eq(100)
     end
 
-    it "#total_revenue_with_discounts" do
+    it "#calculate_total_revenue_with_discounts" do
       @merchant1 = Merchant.create!(name: 'Hair Care')
       @discount1 = Discount.create!(percent_discount: 0.1, quantity: 10, merchant_id: @merchant1.id)
       @discount2 = Discount.create!(percent_discount: 0.05, quantity: 6, merchant_id: @merchant1.id)
