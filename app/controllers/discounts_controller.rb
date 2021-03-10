@@ -50,13 +50,8 @@ class DiscountsController < ApplicationController
     @discount = Discount.find(params[:id])
   end
 
-  # def discount_create_params
-  #   params.permit(:percent_discount, :quantity)
-  # end
 
   def discount_params
-    # params[:discount][:percent_discount] = params[:discount][:percent_discount].to_f/100.0
-
     params.permit(:percent_discount, :quantity)
   end
 end

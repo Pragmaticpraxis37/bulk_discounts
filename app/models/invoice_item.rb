@@ -7,6 +7,8 @@ class InvoiceItem < ApplicationRecord
 
   belongs_to :invoice
   belongs_to :item
+  has_one :merchant, through: :item
+  has_many :discounts, through: :merchant
 
   enum status: [:pending, :packaged, :shipped]
 
@@ -17,6 +19,14 @@ class InvoiceItem < ApplicationRecord
 
 
   def discount_applied_status
-    
+    invoice_item_quantity = self.quantity
+
+    discounts
+    .where("quantity <= ?", invoice_item_quantity)
+    .order(percent_discount: :desc)
+    .pluck(:id)
+    .first
   end
 end
+
+# discounts.where("quantity <= ?", invoice_item_quantity).order(percent_discount: :desc).pluck(:id).first

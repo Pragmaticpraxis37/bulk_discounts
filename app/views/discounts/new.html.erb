@@ -2,7 +2,7 @@
 
 <%= form_with url: merchant_discounts_path(@merchant), method: "post", local: true do |form| %>
   <%= form.label "Choose a percentage" %><br>
-  <%= form.number_field :percent_discount, min: 0, max: 1, step: 0.01 %><br>
+  <%= form.number_field :percent_discount, min: 0.01, max: 1, step: 0.01 %><br>
   <%= form.label "Choose a quantity" %><br>
   <%= form.number_field :quantity, min: 1 %><br>
   <%= form.submit "Create Discount" %>

@@ -19,8 +19,6 @@ RSpec.describe "create new discounts" do
 
     click_button("Create Discount")
 
-    save_and_open_page
-
     expect(page).to have_current_path(merchant_discounts_path(@merchant1))
     expect(page).to have_content("#{@merchant1.discounts.first.percent_discount} percent off when #{@merchant1.discounts.first.quantity} items are bought.")
   end
@@ -41,7 +39,7 @@ RSpec.describe "create new discounts" do
     click_button("Create Discount")
 
     expect(page).to have_current_path(merchant_discounts_path(@merchant1))
-  
+
     expect(page).to have_content("#{@merchant1.discounts.first.percent_discount} percent off when #{@merchant1.discounts.first.quantity} items are bought.")
   end
 
@@ -62,8 +60,6 @@ RSpec.describe "create new discounts" do
     click_button("Create Discount")
 
     expect(page).to have_current_path(merchant_discounts_path(@merchant1))
-
-    save_and_open_page
 
     expect(page).to have_content("#{@merchant1.discounts.first.percent_discount} percent off when #{@merchant1.discounts.first.quantity} items are bought.")
   end
