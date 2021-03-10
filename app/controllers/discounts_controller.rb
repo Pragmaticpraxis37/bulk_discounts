@@ -1,5 +1,5 @@
 class DiscountsController < ApplicationController
-  before_action :find_merchant, only: [:index, :new, :create, :destory, :show, :edit, :update]
+  before_action :find_merchant
   before_action :find_discount, only: [:edit, :update]
 
   def index
@@ -9,11 +9,11 @@ class DiscountsController < ApplicationController
   end
 
   def create
-    @discount = @merchant.discounts.new(discount_create_params)
+    @discount = @merchant.discounts.new(discount_params)
     if @discount.save
       redirect_to merchant_discounts_path(@merchant)
     else
-      flash[:error] = "Please use only whole numbers in Percent Discount and Quantity fields"
+      flash[:error] = @discount.errors.full_messages
       render :new
     end
   end
@@ -26,19 +26,17 @@ class DiscountsController < ApplicationController
   end
 
   def update
-    # @discount.update(discount_create_params)
-    # require "pry"; binding.pry
-    if @discount.update(:percent_discount => params[:discount][:percent_discount], :quantity => params[:discount][:quantity])
+    @discount.update(discount_params)
+    if @discount.save
       redirect_to merchant_discount_path(@merchant, @discount)
     else
-      flash[:error] = "Please use only whole numbers in Percent Discount and Quantity fields"
+      flash[:error] = @discount.errors.full_messages
       render :edit
-    end   
+    end
   end
 
   def destroy
     Discount.destroy(params[:id])
-    @merchant = Merchant.find(params[:merchant_id])
     redirect_to merchant_discounts_path(@merchant)
   end
 
@@ -52,7 +50,13 @@ class DiscountsController < ApplicationController
     @discount = Discount.find(params[:id])
   end
 
-  def discount_create_params
+  # def discount_create_params
+  #   params.permit(:percent_discount, :quantity)
+  # end
+
+  def discount_params
+    # params[:discount][:percent_discount] = params[:discount][:percent_discount].to_f/100.0
+
     params.permit(:percent_discount, :quantity)
   end
 end

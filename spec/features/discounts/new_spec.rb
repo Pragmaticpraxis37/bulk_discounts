@@ -4,70 +4,67 @@ RSpec.describe "create new discounts" do
   before :each do
     @merchant1 = Merchant.create!(name: 'Hair Care')
     @merchant2 = Merchant.create!(name: 'Body Care')
+
+    json_response = File.read('spec/fixtures/holidays.json')
+    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
   end
 
   it "shows a user form to create a new bulk discount and creates it" do
-    json_response = File.read('spec/fixtures/holidays.json')
-    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
-
     visit new_merchant_discount_path(@merchant1)
 
     expect(page).to have_content("Create a Discount")
 
-    fill_in("percent_discount", with: 10)
+    fill_in("percent_discount", with: 0.1)
     fill_in("quantity", with: 20)
+
     click_button("Create Discount")
 
+    save_and_open_page
+
     expect(page).to have_current_path(merchant_discounts_path(@merchant1))
-    expect(page).to have_content("10 percent off when 20 items are bought.")
+    expect(page).to have_content("#{@merchant1.discounts.first.percent_discount} percent off when #{@merchant1.discounts.first.quantity} items are bought.")
   end
 
   it "will not let invalid data be passed into the create form" do
-    json_response = File.read('spec/fixtures/holidays.json')
-    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
-
     visit new_merchant_discount_path(@merchant1)
 
     fill_in("percent_discount", with: "ten")
     fill_in("quantity", with: 10)
+
     click_button("Create Discount")
 
-    expect(page).to have_content("Please use only whole numbers in Percent Discount and Quantity fields")
+    expect(page).to have_content("Percent discount is not a number")
 
-    fill_in("percent_discount", with: 10)
+    fill_in("percent_discount", with: 0.1)
     fill_in("quantity", with: 20)
+
     click_button("Create Discount")
 
     expect(page).to have_current_path(merchant_discounts_path(@merchant1))
-    expect(page).to have_content("10 percent off when 20 items are bought.")
+  
+    expect(page).to have_content("#{@merchant1.discounts.first.percent_discount} percent off when #{@merchant1.discounts.first.quantity} items are bought.")
   end
 
   it "will not let an incomplete form be accepted" do
-    json_response = File.read('spec/fixtures/holidays.json')
-    stub_request(:get,'https://date.nager.at/Api/v2/NextPublicHolidays/US').to_return(status: 200, body: json_response)
     visit new_merchant_discount_path(@merchant1)
 
     fill_in("percent_discount", with: "ten")
+
     click_button("Create Discount")
 
-    expect(page).to have_content("Please use only whole numbers in Percent Discount and Quantity fields")
+    expect(page).to have_content("Quantity can't be blank")
+    expect(page).to have_content("Quantity is not a number")
+    expect(page).to have_content("Percent discount is not a number")
 
-    fill_in("percent_discount", with: 10)
+    fill_in("percent_discount", with: 0.1)
     fill_in("quantity", with: 20)
+
     click_button("Create Discount")
 
     expect(page).to have_current_path(merchant_discounts_path(@merchant1))
-    expect(page).to have_content("10 percent off when 20 items are bought.")
+
+    save_and_open_page
+
+    expect(page).to have_content("#{@merchant1.discounts.first.percent_discount} percent off when #{@merchant1.discounts.first.quantity} items are bought.")
   end
 end
-
-
-
-# As a merchant
-# When I visit my bulk discounts index
-# Then I see a link to create a new discount
-# When I click this link
-# Then I am taken to a new page where I see a form to add a new bulk discount
-# When I fill in the form with valid data
-# Then I am redirected back to the bulk discount index
-# And I see my new bulk discount listed
